@@ -1,0 +1,33 @@
+# Default server configuration
+#
+server {
+        # SSL configuration
+        #
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+		ssl_protocols TLSv1.2;
+        ssl on;
+	ssl_certificate /etc/ssl/certs/nhariman.crt;
+	ssl_certificate_key /etc/ssl/certs/nhariman.key;
+
+        root /var/www/html;
+
+        # Add index.php to the list if you are using PHP
+        index new.html index.html index.htm index.nginx-debian.html;
+
+        server_name _ nhariman.42.fr www.nhariman.42.fr;
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+        }
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        location ~ /\.ht {
+               deny all;
+        }
+        client_max_body_size 64M;
+}
