@@ -1,0 +1,3 @@
+FROM alpine
+
+EXPOSE 8088 8091

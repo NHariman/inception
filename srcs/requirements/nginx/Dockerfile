@@ -23,7 +23,7 @@
 # docker ps
 
 FROM debian:buster
-LABEL maintainer=nhariman email=<nhariman@student.codam.nl>
+LABEL maintainer=${INTRANAME} email=<${INTRANAME}@student.codam.nl>
 
 #install and download everything necessary
 RUN apt-get update && \
@@ -37,7 +37,7 @@ COPY /tools/ ./tools/
 
 #set ownerships and generate ssl key and certificate
 RUN mv tools/default /etc/nginx/sites-available/ &&\
-	mv tools/new.html /var/www/html/ &&\
+	mv tools/index_nginx.html /var/www/html/ &&\
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/nhariman.key -out /etc/ssl/certs/nhariman.crt
 
 #80 for internal 433 for ssl

@@ -1,0 +1,40 @@
+goal of the project:
+set up a kubernetes multi-service cluster with each service running a dedicated container.
+
+services:
+- grafana (3000)
+- wordpress (5050)
+- nginx (80/443/22)
+- phpmyadmin (5000)
+- FTPS (21)
+- influxdb (8088)
+- mysql (3306)
+
+components:
+- kubernetes web dashboard
+- load balancer (metallb)
+- wordpress website on port 5050 with mysql database and nginx server
+- phpmyadmin on port 5000 with sql database and nginx server.
+- nginx server on ports 80 and 443. [DONE]
+	- port 80 needs a 301 redirection to 443 [DONE]
+	- if /wordpress is routed, 307 redirect to IP:WPPORT [DONE]
+	- if /phpmyadmin is routed, reverse proxy to IP:PMAPORT [DONE]
+- FTPS server on port 21
+- grafana platform on port 3000
+	- must link to Influx DB database
+	- must monitor all containers
+	- requires one dashboard per service
+	- InfluxDB and grafana must be in two distinct containers
+
+behaviours:
+- data presistence in case of a db crash
+- access to nginx by logging into ssh
+- containers must resstart in case of crash or stop of components.
+- redirection must be done with Load Balancer.
+	- LoadBalancer for: FTPS, Grafana, Wordpress, PhpMyAdmin, nginx
+	- ClusterIP for: influxDB, MySQL.
+	- THE USE OF NODEPORT IS FORBIDDEN.
+
+about ports: 
+for mySQL, port 3306 https://www.speedguide.net/port.php?port=3306
+for influxdb, port 8086 for client-server communication and 8088 for backup and restore operations. https://docs.influxdata.com/influxdb/v1.7/introduction/installation/

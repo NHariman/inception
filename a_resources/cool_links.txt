@@ -1,0 +1,13 @@
+Docker-compose for wordpress and mariadb:
+https://t-heiten.net/docker/docker-recipes/recipe-wordpress-and-mariadb-via-docker-compose/
+
+Docker commands for presistent data (Volumes)
+https://docs.docker.com/storage/volumes/
+also check the spark session of ft_server for more info!!
+
+configuring nginx with tls 1.2 or 1.3
+https://www.cyberciti.biz/faq/configure-nginx-to-use-only-tls-1-2-and-1-3/
+
+docker-compose with makefile examples:
+http://www.inanzzz.com/index.php/post/wqfy/a-makefile-example-with-docker-compose-commands
+https://github.com/krom/docker-compose-makefile

@@ -1,0 +1,55 @@
+################################
+# nginx service and deployment #
+################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 443
+    name: http to https
+  - port: 443 #port on which a different service is located that interacts with the application.
+    targetPort: 443 # port on which the application is running inside the container. identical to containerport
+    name: https
+  - port: 8088 # 8088, influxdb, backup and restore operations
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 8088
+    targetport: 443
+    protocol: TCP
+    name: https
+  - port: 8088
+    targetport: 21 #mail port
+    name: file transfer protocol
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: ft_nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        - containerPort: 21
+      restartPolicy: Always #pod always restarts in the event of a crash
