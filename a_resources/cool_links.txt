@@ -1,6 +1,9 @@
 Docker-compose for wordpress and mariadb:
 https://t-heiten.net/docker/docker-recipes/recipe-wordpress-and-mariadb-via-docker-compose/
 
+docker-compose wtih php-fpm and mariadb
+https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a
+
 Docker commands for presistent data (Volumes)
 https://docs.docker.com/storage/volumes/
 also check the spark session of ft_server for more info!!

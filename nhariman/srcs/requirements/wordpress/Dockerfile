@@ -23,7 +23,7 @@
 # docker ps
 
 FROM debian:buster
-LABEL maintainer=nhariman email=<nhariman@student.codam.nl>
+LABEL maintainer=${INTRANAME} email=<${INTRANAME}@student.codam.nl>
 
 #install and download everything necessary
 RUN apt-get update && \
@@ -60,27 +60,20 @@ RUN	mv tools/default /etc/nginx/sites-available/ &&\
 	mv tools/wp-config.php var/www/html/wordpress/ &&\
 	service php7.3-fpm start
 
-#set wp and phpmyadmin defaults, these can be changed during build by using 
-# --build-arg <arg_name>=<input>
-#default values are provided in case no arguments are given. 
-#Keep in mind, you have to use --build-arg for every variable you want to change
-ENV admin_user=user
-ENV admin_pw=pw
-ENV admin_email=user@email.com
-
 #setup mysql, phpmyadmin and wp database, for wp & PhpMyAdmin
 #defaults: 
 # admin_user: nhariman
 # admin_pw: codam42born2code
 RUN chmod +x /tools/wp-cli.phar &&\
 	mv tools/wp-cli.phar /usr/local/bin/wp &&\
-	wp core install --url="https://${INTRANAME}.42.fr/wordpress"  --title="ft_server" --admin_user=${admin_user} --admin_password=${admin_pw} --admin_email=${admin_email} --allow-root --path="var/www/html/wordpress"
+	wp core install --url="https://${INTRANAME}.42.fr/wordpress"  --title="Inception" --admin_user=${admin_user} --admin_password=${admin_pw} --admin_email=${admin_email} --allow-root --path="var/www/html/wordpress" &&\
+	wp user create ${USR} ${USR}@42.fr --user_pass=#{USR_PW} --porcelain
 
 #set ownerships and generate ssl key and certificate
 RUN chown -R www-data:www-data /var/www/ &&\
  	chown -R www-data:www-data /var/lib/php/sessions/ &&\
  	service php7.3-fpm restart &&\
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/localhost.key -out /etc/ssl/certs/localhost.crt
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
 
 #80 for internal 433 for ssl
 #according to the nginx config in "default" the 80 port will redirect to 443 for a secure connection 
