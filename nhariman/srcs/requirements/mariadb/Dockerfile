@@ -35,9 +35,9 @@ RUN apt-get update && \
 COPY /tools/ ./tools/
 
 RUN service mysql start &&\
-	mysql -e "CREATE USER '${ADMIN_USR}'@'localhost' identified by '${ADMIN_PW}';" &&\
+	mysql -e "CREATE USER '${SQL_ADMIN}'@'localhost' identified by '${SQL_ADMIN_PW}';" &&\
 	mysql -e "CREATE DATABASE wpdb;" &&\
-	mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${ADMIN_USR}'@'localhost' IDENTIFIED BY '${ADMIN_PW}';" &&\
+	mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${SQL_ADMIN}'@'localhost' IDENTIFIED BY '${SQL_ADMIN_PW}';" &&\
 	mysql -e "FLUSH PRIVILEGES;"
 
 EXPOSE 3306

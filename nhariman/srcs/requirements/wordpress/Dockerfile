@@ -66,7 +66,7 @@ RUN	mv tools/default /etc/nginx/sites-available/ &&\
 # admin_pw: codam42born2code
 RUN chmod +x /tools/wp-cli.phar &&\
 	mv tools/wp-cli.phar /usr/local/bin/wp &&\
-	wp core install --url="https://${INTRANAME}.42.fr/wordpress"  --title="Inception" --admin_user=${admin_user} --admin_password=${admin_pw} --admin_email=${admin_email} --allow-root --path="var/www/html/wordpress" &&\
+	wp core install --url="https://${DOMAIN_NAME}/wordpress"  --title="Inception" --admin_user=${WP_ADMIN} --admin_password=${WP_ADMIN_PW} --admin_email=${WP_ADMIN_EMAIL} --allow-root --path="var/www/html/wordpress" &&\
 	wp user create ${USR} ${USR}@42.fr --user_pass=#{USR_PW} --porcelain
 
 #set ownerships and generate ssl key and certificate
