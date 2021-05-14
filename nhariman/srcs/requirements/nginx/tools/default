@@ -3,9 +3,9 @@
 server {
         # SSL configuration
         #
-        listen 443 ssl default_server;
-        listen [::]:443 ssl default_server;
-		ssl_protocols TLSv1.2;
+        listen 443 ssl;
+        listen [::]:443 ssl;
+	ssl_protocols TLSv1.2;
         ssl on;
 	ssl_certificate /etc/ssl/certs/42.crt;
 	ssl_certificate_key /etc/ssl/certs/42.key;
@@ -13,7 +13,7 @@ server {
         root /var/www/42.fr/public_html;
 
         # Add index.php to the list if you are using PHP
-        index 42.html index.html index.htm;
+        index index_nginx.html 42.html index.html index.htm;
 
         server_name ${INTRANAME}.42.fr www.${INTRANAME}.42.fr;
 

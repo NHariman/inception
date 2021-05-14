@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - /home/nhariman/data/:/var/lib/mysql
+    restart: always
+  
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - /home/nhariman/data:/var/www/html
+    depends_on:
+      - mariadb
+    links:
+      - mysql
+    restart: always
+
+  nginx:
+    image: my_nginx:latest
+    ports:
+      - 443:443
+    links:
+      - wordpress
+    extra_hosts:
+      - "nhariman.42.fr:127.0.0.1"
+    restart: always
+
+networks:
+  default:
+    external:
+      name: nginx

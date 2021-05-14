@@ -1,0 +1,60 @@
+# Docker compose is used to define and run multi-container application
+# You use a yml to configure your applications services and create all the app's services from that configuration
+# docker-compose is an automated multi-container workflow. 
+# BEST ASSETS OF COMPOSE
+# - Multiple isolated environments on a single host
+# - Preserve volume data when containers are created
+# - Only recreate containers that have changed
+# - Variables and moving a composition between environments
+# - Orchesstrate multiple containers that work together
+
+# Compose used Docker Engine, already included on Docker Desktop
+
+# Docker compose files work by applying multiple commands that are declared within a single yml config file
+# BASIC STRUCTURE
+
+version:	'X'
+
+services:
+	web:
+		build: .
+		ports:
+			- "5000:5000"
+		volumes:
+		- .:/code
+	redis:
+		image: redis
+
+
+# BETTER EXAMPLE
+version:	'3'
+services:
+	web:
+	# path to docker file
+	# . is the current workir in which docker-compose.yml is present
+		build: .
+		# mapping of container port to host
+		ports:
+			- "5000:5000"
+		# mount volume
+		volumes:
+			- "/usercode/:/code"
+		# link database container to app container for rechability
+		links:
+			- "database:backenddb"
+	
+	database:
+		# image to fetch (from docker hub in this case)
+		image: mysql/mysql-server:5.7
+		# environmental variables for startup script
+		# container will use the declared variables
+		environment:
+			- "MYSQL_ROOT_PASSWORD=root"
+			- "MYSQL_USER=testuser"
+			- "MYSQL_PASSWORD=admin123"
+			- "MYSQL_DATABASE=backend"
+		# mount init.sql file to automatically run and create tables for us
+		# everything in docker-entrypoint-initdb.d folder is executed ass soon as container is up and running
+		volumes:
+			- "/usrcode/db/init.sql:/dcker-entrypoint-init.db/init.sql"
+

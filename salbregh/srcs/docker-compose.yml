@@ -1,0 +1,48 @@
+# LINK: https://www.domysee.com/blogposts/reverse-proxy-nginx-docker-compose
+# LINK 2: https://www.educative.io/blog/docker-compose-tutorial
+# LINKE 3: https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a
+
+# denotes which version of docker compose is used
+version:  '3'
+
+# this section defines all the different container we will create
+services:
+  # name of the nginx app service, Docker compose will create containers with the name we provide 
+  nginx:
+    # is the same as going into the nginx file and running docker build -t nginx .
+    build: requirements/nginx
+    container_name: nginx
+    # specify a volume that replaces the default configuration file
+    # volumes: ./nginx.conf:/ets/nginx/nginx.conf
+    # mapping of the hosts port 443 to the containters port 443
+    ports:
+      - 443:443
+  
+  mariadb:
+    build: requirements/mariadb
+    container_name: mariadb
+    ports:
+      - 3306:3306
+  
+  wordpress:
+    build: requirements/wordpress
+
+
+# volumes efine persistent storage for docker containers. If an application
+# writes somewhere no volume is defined, data will be lost when the container
+# stops. There are 2 types of volumes: one that map a file or directory inside
+# the container, and the ones that make a file or direcotry persistent 
+# (named volumes).
+# The first type: volumes that map a specific file into the ocntinaer
+# is defined in this way:
+# volumes:
+  # - ./nginx.conf:/etc/nginx/nginx.conf
+  # - /etc/letsencrypt/:/etc/letsencrypt/
+# named volumes are specified as a seperate root configuration entry
+# and directly on the container configuration
+# (underneath nginx) volumes:
+  # - "certificates:"
+
+  # (as seperate underneath services) volumes:
+    # certificates:
+
