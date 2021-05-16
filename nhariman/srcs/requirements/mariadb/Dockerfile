@@ -26,13 +26,14 @@ FROM debian:buster
 LABEL maintainer=nhariman email=<nhariman@student.codam.nl>
 
 #install and download everything necessary
-RUN apt-get update && \
+RUN apt-get update &&\
 	apt install -y \
+	apt-utils \
 	mariadb-server \
-	mariadb-client \
+	mariadb-client
 
 #Copy all necessary configuration files
-COPY /tools/ ./tools/
+COPY /tools/ ./tools
 
 RUN service mysql start &&\
 	mysql -e "CREATE USER '${SQL_ADMIN}'@'localhost' identified by '${SQL_ADMIN_PW}';" &&\

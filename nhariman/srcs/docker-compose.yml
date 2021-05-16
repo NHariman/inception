@@ -1,23 +1,9 @@
 version: '3'
 services:
-  mariadb:
-    image: mariadb:latest
-    volumes:
-      - /home/nhariman/data/:/var/lib/mysql
-    restart: always
-  
-  wordpress:
-    image: wordpress:latest
-    volumes:
-      - /home/nhariman/data:/var/www/html
-    depends_on:
-      - mariadb
-    links:
-      - mysql
-    restart: always
-
   nginx:
-    image: my_nginx:latest
+    build:
+      context: ./requirements/nginx
+    image: nginx
     ports:
       - 443:443
     links:
@@ -26,7 +12,34 @@ services:
       - "nhariman.42.fr:127.0.0.1"
     restart: always
 
-networks:
-  default:
-    external:
-      name: nginx
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    volumes:
+      - sqldb:/var/lib/mysql
+    restart: always
+  
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    image: wordpress
+    volumes:
+      - wpdb:/var/www/html
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+    restart: always
+  
+volumes:
+  sqldb: 
+    driver: local
+    driver_opts:
+      type: none
+      device: nhariman/data/
+  wpdb:
+    driver: local
+    driver_opts:
+      type: none
+      device: nhariman/data/

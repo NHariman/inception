@@ -28,6 +28,7 @@ LABEL maintainer=${INTRANAME} email=<${INTRANAME}@student.codam.nl>
 #install and download everything necessary
 RUN apt-get update && \
 	apt install -y \
+	apt-utils \
 	nginx \
 	php-cgi \
 	php-common \
@@ -57,17 +58,11 @@ RUN tar -xvzf tools/wordpress-5.7.1.tar.gz &&\
 #setup nginx and phpmyadmin and turn on php7.3-fpm
 RUN	mv tools/default /etc/nginx/sites-available/ &&\
 	mv tools/php.ini /etc/php/7.3/fpm/ &&\
-	mv tools/wp-config.php var/www/html/wordpress/ &&\
 	service php7.3-fpm start
 
-#setup mysql, phpmyadmin and wp database, for wp & PhpMyAdmin
-#defaults: 
-# admin_user: nhariman
-# admin_pw: codam42born2code
+#setup the wp-cli but don't use it yet
 RUN chmod +x /tools/wp-cli.phar &&\
-	mv tools/wp-cli.phar /usr/local/bin/wp &&\
-	wp core install --url="https://${DOMAIN_NAME}/wordpress"  --title="Inception" --admin_user=${WP_ADMIN} --admin_password=${WP_ADMIN_PW} --admin_email=${WP_ADMIN_EMAIL} --allow-root --path="var/www/html/wordpress" &&\
-	wp user create ${USR} ${USR}@42.fr --user_pass=#{USR_PW} --porcelain
+	mv tools/wp-cli.phar /usr/local/bin/wp
 
 #set ownerships and generate ssl key and certificate
 RUN chown -R www-data:www-data /var/www/ &&\
@@ -75,15 +70,11 @@ RUN chown -R www-data:www-data /var/www/ &&\
  	service php7.3-fpm restart &&\
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
 
-#80 for internal 433 for ssl
-#according to the nginx config in "default" the 80 port will redirect to 443 for a secure connection 
-#using the keys generated in the previous run
 EXPOSE 9000
 
-#restart services and use bash to create in-line command shell
-#used entrypoint rather than cmd to ensure no extra arguments can be provided. 
-#To toggle the autoindex on and off use: bash srcs/autoindex_toggle.sh in shell
+#restart services and execute the wordpress setup now that everything is configured with networks and whatnot using setup.sh
 ENTRYPOINT  service nginx restart &&\
 			service php7.3-fpm restart &&\
 			service sendmail start &&\
+			tools/setup.sh &&\
 			bash
