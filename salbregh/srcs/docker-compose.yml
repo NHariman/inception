@@ -2,30 +2,54 @@
 # LINK 2: https://www.educative.io/blog/docker-compose-tutorial
 # LINKE 3: https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a
 
-# denotes which version of docker compose is used
 version:  '3'
-
-# this section defines all the different container we will create
-services:
-  # name of the nginx app service, Docker compose will create containers with the name we provide 
-  nginx:
-    # is the same as going into the nginx file and running docker build -t nginx .
-    build: requirements/nginx
+services: # this section defines all the different container we will create 
+  nginx:  # name of the nginx app service, Docker compose will create containers with the name we provide
+    build:
+      context: requirements/nginx
     container_name: nginx
+    image: nginx
     # specify a volume that replaces the default configuration file
     # volumes: ./nginx.conf:/ets/nginx/nginx.conf
-    # mapping of the hosts port 443 to the containters port 443
     ports:
-      - 443:443
+      - 443:80 # PAKT 80 UIT NGINX EN OPENT OP localhost:443
+    links:
+      - wordpress
+    restart: always
+    networks: 
+      - inception
   
   mariadb:
-    build: requirements/mariadb
+    build:
+      context: requirements/mariadb
     container_name: mariadb
-    ports:
-      - 3306:3306
+    image: mariadb
+    restart: always
+    env_file:
+      - ./.env
+    networks: 
+      - inception
+    # volumes
   
   wordpress:
-    build: requirements/wordpress
+    build:
+      context: requirements/wordpress
+    container_name: wordpress
+    image: wordpress
+    restart: always
+    env_file:
+      - ./.env
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+    networks: 
+      - inception
+    # volumes
+
+networks: 
+  inception:
+
 
 
 # volumes efine persistent storage for docker containers. If an application

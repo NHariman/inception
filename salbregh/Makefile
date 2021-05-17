@@ -1,3 +1,6 @@
+# THE MAKEFILE SHOULD SET UP THE ENTIRE APPLICATION
+# IT HAS TO BUILD THE DOCKER IMAGES USING DOCKER COMPOSE
+
 # start by defining a name for you target
 # the target is a collection of commands that need to be performed
 # to complete an action, like building an image
