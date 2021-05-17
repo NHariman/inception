@@ -1,13 +1,15 @@
-FROM    debian:buster
+FROM	mariadb
 
-LABEL   maintainer=${INTRANAME}
+# FROM    debian:buster
 
-RUN     apt-get update &&\
-        apt install -y \
-        apt-utils \
-        apt-utils \
-        mariadb-server \
-        mariadb-client
+# LABEL   maintainer=${INTRANAME}
 
-# the default port for mariadb
-EXPOSE 3306
+# RUN     apt-get update &&\
+#         apt install -y \
+#         apt-utils \
+#         apt-utils \
+#         mariadb-server \
+#         mariadb-client
+
+# # the default port for mariadb
+# EXPOSE 3306
