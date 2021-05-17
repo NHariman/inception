@@ -8,7 +8,7 @@ $(NAME):
 	docker-compose -f $(YML_PATH)/docker-compose.yml up -d
 
 overv:
-	ls -la && docker ps -a && docker image ls
+	@echo "FILES" && ls -la && echo "" && docker ps -a && echo "" && docker image ls
 
 # Stops all running containers
 stop:

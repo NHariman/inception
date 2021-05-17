@@ -2,6 +2,7 @@ version: "3"  # without specifying version it complains about unsupported config
 services:
   nginx:
     build: ./requirements/nginx
+    image: nginx
     ports:
       - "443:443"
 # volumes:
