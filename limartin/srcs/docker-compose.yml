@@ -1,11 +1,10 @@
-# version: "3"  # optional since v1.27.0 -> so commenting it out
+version: "3"  # without specifying version it complains about unsupported config options.
 services:
   nginx:
     build: ./requirements/nginx
     ports:
       - "443:443"
-volumes:
-  logvolume01: {} #No idea how to use volumes yet so just keeping the default one in for now?
+# volumes:
 
 
 # TEMPLATE:
