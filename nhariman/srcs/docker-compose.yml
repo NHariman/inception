@@ -17,7 +17,7 @@ services:
       context: ./requirements/mariadb
     image: mariadb
     volumes:
-      - sqldb:/var/lib/mysql
+      - /Users/nhariman/data:/var/lib/mysql
     restart: always
   
   wordpress:
@@ -25,21 +25,21 @@ services:
       context: ./requirements/wordpress
     image: wordpress
     volumes:
-      - wpdb:/var/www/html
+      - /Users/nhariman/data:/var/www/html
     depends_on:
       - mariadb
     links:
       - mariadb
     restart: always
   
-volumes:
-  sqldb: 
-    driver: local
-    driver_opts:
-      type: none
-      device: nhariman/data/
-  wpdb:
-    driver: local
-    driver_opts:
-      type: none
-      device: nhariman/data/
+# volumes:
+#   sqldb: 
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /Users/nhariman/data
+#   wpdb:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /Users/nhariman/data

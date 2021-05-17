@@ -7,19 +7,13 @@
 
 SRCS = ./srcs/requirements
 
-inception: prerequisites network-start #nginx mariadb wordpress #dependent on the docker containers nginx, mariadb, wordpress
+inception: prerequisites #nginx mariadb wordpress #dependent on the docker containers nginx, mariadb, wordpress
 	# run containers with yaml
-	eval $(docker-machine env inception) &&\
-	cd srcs/ &&	docker-compose up -d
+	bash ./srcs/requirements/tools/docker-machine-setup.sh ; cd srcs/ && docker-compose up -d
 
 prerequisites:
 	@brew list docker-machine || brew install docker-machine
-
-network-start: 
-	#start VM with docker-machine
-	docker-machine create --driver virtualbox inception ;\
-	docker-machine env inception ;\
-	eval $(docker-machine env inception)
+	mkdir -p ${HOME}/data
 
 nginx:
 	docker build -t nginx $(SRCS)/nginx
@@ -27,17 +21,8 @@ nginx:
 mariadb:
 	docker build -t mariadb $(SRCS)/mariadb
 
-# link-network:
-# 	docker network create --attachable wordpress-network
-# 	docker network connect wordpress-network mariadb
-# 	docker network connect wordpress-network wordpress
-# 	docker network connect wordpress-network nginx
-
-
 wordpress: #link-network
 	docker build -t wordpress $(SRCS)/wordpress
-
-#make docker images by compiling them with docker build && docker run?
 
 stop:
 	#stops containers but doesn't remove them
@@ -50,7 +35,7 @@ down:
 quit: #stop VM
 	#shutdown containers and remove volumes
 	cd srcs/ && docker-compose down -v
-	docker-machine stop inception ; docker-machine rm inception -y ; VBoxManage hostonlyif remove vboxnet0
+	docker-machine rm inception -y ; VBoxManage hostonlyif remove vboxnet0
 	#docker network rm wordpress-network
 	#if stopping won't work, use docker-machine kill inception
 
