@@ -1,0 +1,25 @@
+# version: "3"  # optional since v1.27.0 -> so commenting it out
+services:
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+volumes:
+  logvolume01: {} #No idea how to use volumes yet so just keeping the default one in for now?
+
+
+# TEMPLATE:
+# services:
+#   web:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     volumes:
+#       - .:/code
+#       - logvolume01:/var/log
+#     links:
+#       - redis
+#   redis:
+#     image: redis
+# volumes:
+#   logvolume01: {}
