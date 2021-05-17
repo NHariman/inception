@@ -67,8 +67,8 @@ RUN chmod +x /tools/wp-cli.phar &&\
 #set ownerships and generate ssl key and certificate
 RUN chown -R www-data:www-data /var/www/ &&\
  	chown -R www-data:www-data /var/lib/php/sessions/ &&\
- 	service php7.3-fpm restart &&\
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
+ 	service php7.3-fpm restart
+	#openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
 
 EXPOSE 9000
 
