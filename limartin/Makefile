@@ -10,15 +10,18 @@ $(NAME):
 overv:
 	ls -la && docker ps -a && docker image ls
 
-# Stops and removes all containers
-clean:
-	docker stop $$(docker ps -aq)
-	docker rm $$(docker ps -aq)
+# Stops all running containers
+stop:
+	@docker stop $$(docker ps -aq) 2> /dev/null || echo "There are no containers to stop"
+
+# Removes all containers
+clean: stop
+	@docker rm $$(docker ps -aq) 2> /dev/null || echo "There are no containers to remove"
 
 # Also removes all images, as well as performing clean
 fclean: clean
-	docker rmi $$(docker images -q)
+	@docker rmi $$(docker images -q) 2> /dev/null || echo "There are no images to remove"
 
 re: fclean all
 
-.PHONY: all overv clean fclean re
+.PHONY: all overv stop clean fclean re
