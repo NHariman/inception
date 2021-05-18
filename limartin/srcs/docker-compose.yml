@@ -1,11 +1,46 @@
 version: "3"  # without specifying version it complains about unsupported config options.
 services:
+  
   nginx:
     build: ./requirements/nginx
     image: nginx
     ports:
       - "443:443"
-# volumes:
+      
+      # Your NGINX container must be the only entrypoint into your
+      # infrastructure via the port 443 only, using the TLSv1.2 or TLSv1.3
+      # protocol.
+  
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    #volumes:
+     #- wordpress:/var/www/html
+  
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    restart: always #Just taken from the example on Dockerhub
+    environment:
+      MYSQL_ROOT_PASSWORD: example #This needs to change to env variable
+      MYSQL_DATABASE: exampledb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    #volumes:
+     #- db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  mariadb:
 
 
 # TEMPLATE:
