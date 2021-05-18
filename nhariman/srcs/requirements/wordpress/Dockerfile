@@ -62,14 +62,17 @@ RUN	mv tools/default /etc/nginx/sites-available/ &&\
 
 #setup the wp-cli but don't use it yet
 RUN chmod +x /tools/wp-cli.phar &&\
-	mv tools/wp-cli.phar /usr/local/bin/wp
+	mv tools/wp-cli.phar /usr/local/bin/wp &&\
+	mv tools/ca-key.pem /etc/ssl/certs/ &&\
+	mv tools/ca.pem /etc/ssl/certs/ &&\
+	mv tools/cert.pem /etc/ssl/certs/ &&\
+	mv tools/key.pem /etc/ssl/certs/
 
 #set ownerships and generate ssl key and certificate
 RUN chown -R www-data:www-data /var/www/ &&\
  	chown -R www-data:www-data /var/lib/php/sessions/ &&\
  	service php7.3-fpm restart
-	#openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
-
+	
 EXPOSE 9000
 
 #restart services and execute the wordpress setup now that everything is configured with networks and whatnot using setup.sh
