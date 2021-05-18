@@ -16,10 +16,69 @@ server {
 
 	server_name limartin.42.fr www.limartin.42.fr localhost www.localhost ;
 
+	index index.php index.html index.htm;
+
+	# created as mount point at build time by WordPress Dockerfile.
+	root /var/www/html;
+
+	# Used by Certbot for making certificates -> probably not how we'll do this but lets see where it goes.
+	location ~ /.well-known/acme-challenge {
+			allow all;
+			root /var/www/html;
+	}
+
+	# allows index.php to check if tried args match any index.
+	location / {
+			try_files $uri $uri/ /index.php$is_args$args;
+	}
+
+	# This location block will handle PHP processing and proxy these requests to our wordpress container. 
+	# Because our WordPress Docker image will be based on the php:fpm image, 
+	# we will also include configuration options that are specific to the FastCGI protocol in this block. 
+	# Nginx requires an independent PHP processor for PHP requests: in our case, 
+	# these requests will be handled by the php-fpm processor that’s included with the php:fpm image. 
+	# Additionally, this location block includes FastCGI-specific directives, variables, and options that 
+	# will proxy requests to the WordPress application running in our wordpress container, 
+	# set the preferred index for the parsed request URI, and parse URI requests.
+
+	location ~ \.php$ {
+			try_files $uri =404;
+			fastcgi_split_path_info ^(.+\.php)(/.+)$;
+			fastcgi_pass wordpress:9000;
+			fastcgi_index index.php;
+			include fastcgi_params;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_param PATH_INFO $fastcgi_path_info;
+	}
+
+	# This block will handle .htaccess files since Nginx won’t serve them. 
+	# The deny_all directive ensures that .htaccess files will never be served to users.
+
+	location ~ /\.ht {
+			deny all;
+	}
+
+
+	# These blocks ensure that requests to /favicon.ico and /robots.txt will not be logged.
+	location = /favicon.ico {
+			log_not_found off; access_log off;
+	}
+	location = /robots.txt {
+			log_not_found off; access_log off; allow all;
+	}
 	
+	# This block turns off logging for static asset requests and ensures that these assets are highly cacheable, 
+	# as they are typically expensive to serve. 
+	location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
+			expires max;
+			log_not_found off;
+	}
 
 	#return 301 https://$server_name$request_uri;
 }
+
+
+
 
 server {
 	listen 443 ssl;
