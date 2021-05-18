@@ -14,6 +14,7 @@ server {
         ssl on;
 	ssl_certificate /etc/ssl/certs/cert.pem;
 	ssl_certificate_key /etc/ssl/certs/key.pem;
+        ssl
 
         root /var/www/html;
 
