@@ -8,7 +8,10 @@ services:
       - "80:80" #Temporarily allowing access to nginx through port 80 (http) before certs have been set up.
       - "443:443"
     links:
-      - wordpress
+      - wordpress:9000
+    environment:
+      - NGINX_HOST=limartin.42.fr #From nginx docker hub
+      - NGINX_PORT=80
     restart: always
       
       # Your NGINX container must be the only entrypoint into your
@@ -21,7 +24,7 @@ services:
     # ports:
     #   - 8080:80
     links: #Should be like depends_on but with extra addressability?
-      - mariadb
+      - mariadb:3306
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_USER: exampleuser
