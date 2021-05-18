@@ -29,7 +29,10 @@ COPY /tools/ ./tools/
 #set ownerships and generate ssl key and certificate
 RUN mv tools/default /etc/nginx/sites-available/ &&\
 	mv tools/index_nginx.html /var/www/html/ &&\
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/L=Amsterdam/O=Codam/CN=123' -keyout /etc/ssl/certs/42.key -out /etc/ssl/certs/42.crt
+	mv tools/ca-key.pem /etc/ssl/certs/ &&\
+	mv tools/ca.pem /etc/ssl/certs/ &&\
+	mv tools/cert.pem /etc/ssl/certs/ &&\
+	mv tools/key.pem /etc/ssl/certs/
 
 #80 for internal 433 for ssl
 #according to the nginx config in "default" the 80 port will redirect to 443 for a secure connection 
