@@ -10,8 +10,10 @@ services:
     links:
       - wordpress:9000
     environment:
-      - NGINX_HOST=limartin.42.fr #From nginx docker hub
-      - NGINX_PORT=80
+      NGINX_HOST: limartin.42.fr #Trying a different syntax
+      NGINX_PORT: 80
+      # - NGINX_HOST=limartin.42.fr #From nginx docker hub
+      # - NGINX_PORT=80
     restart: always
       
       # Your NGINX container must be the only entrypoint into your
@@ -27,8 +29,6 @@ services:
       - mariadb:3306
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
-      WORDPRESS_DB_USER: exampleuser
-      WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: exampledb
     restart: always
     #volumes:
@@ -38,11 +38,7 @@ services:
     build: ./requirements/mariadb
     image: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: example #This needs to change to env variable
       MYSQL_DATABASE: exampledb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
-      MYSQL_USER: exampleuser
-      MYSQL_PASSWORD: examplepass
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
     restart: always #Just taken from the example on Dockerhub
     #volumes:
      #- db:/var/lib/mysql
