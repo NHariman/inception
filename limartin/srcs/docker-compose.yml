@@ -2,14 +2,21 @@ version: "3"  # without specifying version it complains about unsupported config
 services:
   
   mariadb:
-    build: ./requirements/mariadb
-    image: mariadb
+    # build: ./requirements/mariadb
+    # image: mariadb
+    #example uses: 'image: mysql:8.0', not mariadb
+    image: mysql:8.0
     env_file: .env
     environment:
       MYSQL_DATABASE: wordpressdb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
     restart: always #Just taken from the example on Dockerhub
-    #volumes:
-     #- db:/var/lib/mysql
+    # relies on mysql not mariadb:
+    volumes:
+      - dbdata:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    # not using this network, or defining our own custom one.
+    networks:
+      - app-network
   
   wordpress:
     build: ./requirements/wordpress
