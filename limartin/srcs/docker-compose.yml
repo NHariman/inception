@@ -9,6 +9,7 @@ services:
       - "443:443"
     links:
       - wordpress:9000
+    env_file: .env
     environment:
       NGINX_HOST: limartin.42.fr #Trying a different syntax
       NGINX_PORT: 80
@@ -27,6 +28,7 @@ services:
     #   - 8080:80
     links: #Should be like depends_on but with extra addressability?
       - mariadb:3306
+    env_file: .env
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_NAME: exampledb
@@ -37,6 +39,7 @@ services:
   mariadb:
     build: ./requirements/mariadb
     image: mariadb
+    env_file: .env
     environment:
       MYSQL_DATABASE: exampledb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
     restart: always #Just taken from the example on Dockerhub
