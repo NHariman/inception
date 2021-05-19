@@ -11,12 +11,12 @@ services:
       MYSQL_DATABASE: wordpressdb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
     restart: always #Just taken from the example on Dockerhub
     # relies on mysql not mariadb:
-    volumes:
-      - dbdata:/var/lib/mysql
+    # volumes:
+    #  - dbdata:/var/lib/mysql
     command: '--default-authentication-plugin=mysql_native_password'
     # not using this network, or defining our own custom one.
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
   
   wordpress:
     build: ./requirements/wordpress
@@ -28,7 +28,9 @@ services:
     env_file: .env
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
-      WORDPRESS_DB_NAME: exampledb
+      WORDPRESS_DB_NAME: wordpressdb
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
     #volumes:
      #- wordpress:/var/www/html
