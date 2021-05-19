@@ -32,8 +32,11 @@ services:
       WORDPRESS_DB_USER: $${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: $${MYSQL_PASSWORD}
     restart: always
-    #volumes:
-     #- wordpress:/var/www/html
+    # volumes:
+    #   - wordpress:/var/www/html
+    # not using this network, or defining our own custom one.
+    # networks:
+    #   - app-network
   
   nginx:
     build: ./requirements/nginx
