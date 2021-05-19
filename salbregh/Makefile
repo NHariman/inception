@@ -1,23 +1,51 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: salbregh <salbregh@student.codam.nl>         +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/05/19 09:38:43 by salbregh      #+#    #+#                  #
+#    Updated: 2021/05/19 10:10:05 by salbregh      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
 # THE MAKEFILE SHOULD SET UP THE ENTIRE APPLICATION
 # IT HAS TO BUILD THE DOCKER IMAGES USING DOCKER COMPOSE
-
-# start by defining a name for you target
-# the target is a collection of commands that need to be performed
-# to complete an action, like building an image
 
 # by default make executes the first target in the file
 # you can specify a default by creating a target named default which links to existing targets
 # by listing multiple target you can chain their execution together
 
 NAME = inception
+DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE_FILE = docker-compose.yml
+PATH = srcs
 
-default: build
+all: up
 
-build:
-	docker build -t $(NAME) .
+up:
+	docker-machine create --driver virtualbox inception
+	eval $(docker-machine env inception)
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up -d
 
-debug:
-	docker run --rm $(NAME) /bin/bash
+up_foreground:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up
 
-run:
-	docker run --rm $(NAME)
+stop:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) stop
+
+restart:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) stop
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up -d
+
+logs:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) logs
+
+status:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) ps
+
+clean:
+	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) down
+
+.PHONY: up up_foreground stop restart logs status clean docker-machine
