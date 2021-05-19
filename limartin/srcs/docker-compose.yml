@@ -1,6 +1,31 @@
 version: "3"  # without specifying version it complains about unsupported config options.
 services:
   
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: wordpressdb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
+    restart: always #Just taken from the example on Dockerhub
+    #volumes:
+     #- db:/var/lib/mysql
+  
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    # ports:
+    #   - 8080:80
+    links: #Should be like depends_on but with extra addressability?
+      - mariadb:3306
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: exampledb
+    restart: always
+    #volumes:
+     #- wordpress:/var/www/html
+  
   nginx:
     build: ./requirements/nginx
     image: nginx
@@ -20,31 +45,6 @@ services:
       # Your NGINX container must be the only entrypoint into your
       # infrastructure via the port 443 only, using the TLSv1.2 or TLSv1.3
       # protocol.
-  
-  wordpress:
-    build: ./requirements/wordpress
-    image: wordpress
-    # ports:
-    #   - 8080:80
-    links: #Should be like depends_on but with extra addressability?
-      - mariadb:3306
-    env_file: .env
-    environment:
-      WORDPRESS_DB_HOST: mariadb:3306
-      WORDPRESS_DB_NAME: exampledb
-    restart: always
-    #volumes:
-     #- wordpress:/var/www/html
-  
-  mariadb:
-    build: ./requirements/mariadb
-    image: mariadb
-    env_file: .env
-    environment:
-      MYSQL_DATABASE: exampledb # Below was lifted from Wordpress Dockerhub example (except db was built on mysql5.7)
-    restart: always #Just taken from the example on Dockerhub
-    #volumes:
-     #- db:/var/lib/mysql
 
 volumes:
   wordpress:
