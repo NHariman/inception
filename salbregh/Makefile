@@ -5,47 +5,25 @@
 #                                                      +:+                     #
 #    By: salbregh <salbregh@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
-#    Created: 2021/05/19 09:38:43 by salbregh      #+#    #+#                  #
-#    Updated: 2021/05/19 10:10:05 by salbregh      ########   odam.nl          #
+#    Created: 2021/05/19 11:42:02 by salbregh      #+#    #+#                  #
+#    Updated: 2021/05/19 12:23:29 by salbregh      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-# THE MAKEFILE SHOULD SET UP THE ENTIRE APPLICATION
-# IT HAS TO BUILD THE DOCKER IMAGES USING DOCKER COMPOSE
+# docker-machine rm inception -y
 
-# by default make executes the first target in the file
-# you can specify a default by creating a target named default which links to existing targets
-# by listing multiple target you can chain their execution together
+SRCS = ./srcs
+COMPOSE= docker-compose
+COMPOSE_FILE= docker-compose.yml
 
-NAME = inception
-DOCKER_COMPOSE = docker-compose
-DOCKER_COMPOSE_FILE = docker-compose.yml
-PATH = srcs
+.ONESHELL:
+SHELL := /bin/bash
 
-all: up
+up: docker-machine-check
+	bash ./srcs/requirements/tools/docker-machine-setup.sh
+	# ${COMPOSE} -f ${SRCS}/${COMPOSE_FILE} up -d
+	docker-compose -f ${SRCS}/docker-compose.yml up -d
 
-up:
-	docker-machine create --driver virtualbox inception
-	eval $(docker-machine env inception)
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up -d
+docker-machine-check:
+	@brew list docker-machine || brew install docker-machine
 
-up_foreground:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up
-
-stop:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) stop
-
-restart:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) stop
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) up -d
-
-logs:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) logs
-
-status:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) ps
-
-clean:
-	$(DOCKER_COMPOSE) -f $(PATH)/$(DOCKER_COMPOSE_FILE) down
-
-.PHONY: up up_foreground stop restart logs status clean docker-machine
