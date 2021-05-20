@@ -6,6 +6,7 @@ services:
     # image: mariadb
     #example uses: 'image: mysql:8.0', not mariadb
     image: mysql:8.0
+    container_name: mariadb
     env_file: .env
     environment:
       MYSQL_DATABASE: wordpress
@@ -23,6 +24,7 @@ services:
   wordpress:
     build: ./requirements/wordpress
     image: wordpress
+    container_name: wordpress
     # ports:
     #   - 8080:80
     links: #Should be like depends_on but with extra addressability?
@@ -43,6 +45,7 @@ services:
   nginx:
     build: ./requirements/nginx
     image: nginx
+    container_name: nginx
     ports:
       - "80:80" #Temporarily allowing access to nginx through port 80 (http) before certs have been set up.
       - "443:443"
