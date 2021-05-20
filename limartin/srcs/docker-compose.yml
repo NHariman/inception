@@ -28,11 +28,11 @@ services:
     # ports:
     #   - 8080:80
     links: #Should be like depends_on but with extra addressability?
-      - mariadb
+      - mariadb:3306
     env_file: .env
     environment:
-      WORDPRESS_DB_HOST: mariadb:3306
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: $${DB_HOST}
+      WORDPRESS_DB_NAME: $${DB_NAME}
       WORDPRESS_DB_USER: $${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: $${MYSQL_PASSWORD}
     restart: always
