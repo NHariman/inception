@@ -21,6 +21,7 @@ clean: stop
 # Also removes all images, as well as performing clean
 fclean: clean
 	@docker rmi $$(docker images -q) 2> /dev/null || echo "There are no images to remove"
+	@docker-compose -f srcs/docker-compose.yml down -v --remove-orphans  2> /dev/null
 
 re: fclean all
 
