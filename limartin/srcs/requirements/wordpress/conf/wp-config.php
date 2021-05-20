@@ -20,16 +20,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress_db' ); //mod
+define( 'DB_NAME', getenv_docker('WORDPRESS_DB_NAME') ); //mod
 
 /** MySQL database username */
-define( 'DB_USER', 'root' ); //mod
+define( 'DB_USER', getenv_docker('WORDPRESS_DB_USER') ); //mod
 
 /** MySQL database password */
-define( 'DB_PASSWORD', '' ); //mod
+define( 'DB_PASSWORD', getenv_docker('WORDPRESS_DB_PASSWORD') ); //mod
 
 /** MySQL hostname */
-define( 'DB_HOST', 'localhost' );
+define( 'DB_HOST', getenv_docker('DB_HOST') ); //mod
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
