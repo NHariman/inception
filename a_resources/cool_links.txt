@@ -1,7 +1,7 @@
 Docker-compose for wordpress and mariadb:
 https://t-heiten.net/docker/docker-recipes/recipe-wordpress-and-mariadb-via-docker-compose/
 
-docker-compose wtih php-fpm and mariadb
+docker-compose worpress wih php-fpm and mariadb
 https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a
 
 Docker commands for presistent data (Volumes)
@@ -14,3 +14,6 @@ https://www.cyberciti.biz/faq/configure-nginx-to-use-only-tls-1-2-and-1-3/
 docker-compose with makefile examples:
 http://www.inanzzz.com/index.php/post/wqfy/a-makefile-example-with-docker-compose-commands
 https://github.com/krom/docker-compose-makefile
+
+docker-compose from different directory
+https://nickjanetakis.com/blog/docker-tip-30-running-docker-compose-from-a-different-directory

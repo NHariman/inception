@@ -1,7 +1,7 @@
 server{
         listen 80;
         server_name ${INTRANAME}.42.fr/wordpress;
-        return 301 https://localhost$request_uri;
+        return 301 https://${INTRANAME}.42.fr$request_uri;
 }
 
 # Default server configuration
@@ -9,19 +9,15 @@ server{
 server {
         # SSL configuration
         #
-        listen 443 ssl default_server;
-        listen [::]:443 ssl default_server;
-        ssl on;
-	ssl_certificate /etc/ssl/certs/cert.pem;
-	ssl_certificate_key /etc/ssl/certs/key.pem;
-        ssl
+        listen 9000;
+        listen [::]:9000;
 
         root /var/www/html;
 
         # Add index.php to the list if you are using PHP
         index index.php index.html index.htm index.nginx-debian.html;
 
-        server_name ${INTRANAME}.42.fr;
+        server_name ${INTRANAME}.42.fr/wordpress;
 
         location / {
                 # First attempt to serve request as file, then

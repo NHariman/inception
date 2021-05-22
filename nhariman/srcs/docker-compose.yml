@@ -17,7 +17,7 @@ services:
       context: ./requirements/mariadb
     image: mariadb
     volumes:
-      - /Users/nhariman/data:/var/lib/mysql
+      - ${HOME}/data:/var/lib/mysql
     restart: always
   
   wordpress:
@@ -25,7 +25,7 @@ services:
       context: ./requirements/wordpress
     image: wordpress
     volumes:
-      - /Users/nhariman/data:/var/www/html
+      - ${HOME}/data:/var/www/html
     depends_on:
       - mariadb
     links:
