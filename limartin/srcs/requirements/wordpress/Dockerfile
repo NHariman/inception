@@ -132,8 +132,8 @@ COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
 COPY docker-entrypoint.sh /usr/local/bin/
 
 #MY CODE INSERTION:
+COPY tools/wp-cli.phar /usr/local/bin/wp
 RUN PWD
-COPY /tools/wp-cli.phar ./bin/wp
 #######
 
 ENTRYPOINT ["docker-entrypoint.sh"]
