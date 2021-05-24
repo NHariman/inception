@@ -38,9 +38,11 @@ inception: prerequisites #nginx mariadb wordpress #dependent on the docker conta
 	@# run containers with yaml
 	@echo "${RED}Creating Inception VM.${RESET}" &&\
 	docker-machine create --driver virtualbox inception
+	@echo "${RED}Linking Inception VM to local IP address (localhost)" &&\
+	vboxmanage controlvm inception natpf1 "nameformapping,tcp,,443,,443"
 	@echo "${GREEN}Inception VM created.${RESET}"
 	@echo "${RED}Setting environment to VM${RESET}"
-	@echo "#!/bin/bash" > docker-machine-export.sh
+	@echo "#!/bin/bash" > ${SRCS}/tools/docker-machine-export.sh
 	docker-machine env inception >> ${SRCS}/tools/docker-machine-export.sh &&\
 	eval bash ${SRCS}/tools/docker-machine-export.sh &&\
 	cp -r /Users/nhariman/.docker/machine/certs ${REQ}/nginx/tools ;\
