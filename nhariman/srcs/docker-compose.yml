@@ -1,35 +1,39 @@
 version: '3'
 services:
-  nginx:
-    build:
-      context: ./requirements/nginx
-    image: nginx
-    ports:
-      - 443:443
-    links:
-      - wordpress
-    extra_hosts:
-      - "nhariman.42.fr:127.0.0.1"
-    restart: always
-
-  mariadb:
-    build:
-      context: ./requirements/mariadb
-    image: mariadb
+  mysql:
+    image: mysql
     volumes:
       - ${HOME}/data:/var/lib/mysql
     restart: always
-  
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: user_name
+      MYSQL_PASSWORD: user_pass
+
   wordpress:
-    build:
-      context: ./requirements/wordpress
-    image: wordpress
+    image: wordpress:php7.3-fpm-alpine
     volumes:
       - ${HOME}/data:/var/www/html
     depends_on:
-      - mariadb
+      - mysql
     links:
-      - mariadb
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      MYSQL_ROOT_PASSWORD: mysql_root_pass
+      WORDPRESS_DB_NAME: db_name
+      WORDPRESS_DB_USER: user_name
+      WORDPRESS_DB_PASSWORD: user_pass
+      WORDPRESS_TABLE_PREFIX: wp_
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    links:
+      - wordpress
     restart: always
   
 # volumes:

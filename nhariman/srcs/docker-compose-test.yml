@@ -1,0 +1,45 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    ports:
+      - 443:443
+    links:
+      - wordpress
+    extra_hosts:
+      - "nhariman.42.fr:127.0.0.1"
+    restart: always
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    volumes:
+      - ${HOME}/data:/var/lib/mysql
+    restart: always
+  
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    image: wordpress
+    volumes:
+      - ${HOME}/data:/var/www/html
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+    restart: always
+  
+# volumes:
+#   sqldb: 
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /Users/nhariman/data
+#   wpdb:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /Users/nhariman/data
