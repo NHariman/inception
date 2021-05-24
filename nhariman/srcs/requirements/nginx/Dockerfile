@@ -28,11 +28,7 @@ COPY /tools/ ./tools/
 
 #set ownerships and generate ssl key and certificate
 RUN mv tools/default /etc/nginx/sites-available/ &&\
-	mv tools/index_nginx.html /var/www/html/ &&\
-	mv tools/ca-key.pem /etc/ssl/certs/ &&\
-	mv tools/ca.pem /etc/ssl/certs/ &&\
-	mv tools/cert.pem /etc/ssl/certs/ &&\
-	mv tools/key.pem /etc/ssl/certs/
+	mv tools/index_nginx.html /var/www/html/
 
 #80 for internal 433 for ssl
 #according to the nginx config in "default" the 80 port will redirect to 443 for a secure connection 
@@ -42,4 +38,6 @@ EXPOSE 443
 #restart services and use bash to create in-line command shell
 #used entrypoint rather than cmd to ensure no extra arguments can be provided. 
 #To toggle the autoindex on and off use: bash srcs/autoindex_toggle.sh in shell
-ENTRYPOINT  service nginx start ; bash
+STOPSIGNAL SIGQUIT
+
+ENTRYPOINT  nginx -g daemon off;

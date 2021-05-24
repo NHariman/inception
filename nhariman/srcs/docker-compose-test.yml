@@ -1,17 +1,5 @@
 version: '3'
 services:
-  nginx:
-    build:
-      context: ./requirements/nginx
-    image: nginx
-    ports:
-      - 443:443
-    links:
-      - wordpress
-    extra_hosts:
-      - "nhariman.42.fr:127.0.0.1"
-    restart: always
-
   mariadb:
     build:
       context: ./requirements/mariadb
@@ -30,6 +18,18 @@ services:
       - mariadb
     links:
       - mariadb
+    restart: always
+    
+  nginx:
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    ports:
+      - 443:443
+    links:
+      - wordpress
+    extra_hosts:
+      - "nhariman.42.fr:127.0.0.1"
     restart: always
   
 # volumes:

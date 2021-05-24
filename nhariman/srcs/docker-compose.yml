@@ -3,13 +3,13 @@ services:
   mysql:
     image: mysql
     volumes:
-      - ${HOME}/data:/var/lib/mysql
-    restart: always
+      - ${HOME}/data/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root_pass
       MYSQL_DATABASE: db_name
       MYSQL_USER: user_name
       MYSQL_PASSWORD: user_pass
+    restart: always
 
   wordpress:
     image: wordpress:php7.3-fpm-alpine

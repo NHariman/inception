@@ -62,14 +62,12 @@ RUN	mv tools/default /etc/nginx/sites-available/ &&\
 
 #setup the wp-cli but don't use it yet
 RUN chmod +x /tools/wp-cli.phar &&\
-	mv tools/wp-cli.phar /usr/local/bin/wp &&\
-	mv tools/ca-key.pem /etc/ssl/certs/ &&\
-	mv tools/ca.pem /etc/ssl/certs/ &&\
-	mv tools/cert.pem /etc/ssl/certs/ &&\
-	mv tools/key.pem /etc/ssl/certs/
+	mv tools/wp-cli.phar /usr/local/bin/wp
 
-#set ownerships and generate ssl key and certificate
-RUN chown -R www-data:www-data /var/www/ &&\
+#set ownerships
+RUN userdel www-data &&\
+	useradd -u 82 www-data &&\
+	chown -R www-data:www-data /var/www/ &&\
  	chown -R www-data:www-data /var/lib/php/sessions/ &&\
  	service php7.3-fpm restart
 	
@@ -80,4 +78,4 @@ ENTRYPOINT  service nginx restart &&\
 			service php7.3-fpm restart &&\
 			service sendmail start &&\
 			tools/setup.sh &&\
-			bash
+			php-fpm

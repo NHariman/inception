@@ -1,5 +1,5 @@
 server{
-        listen 80;
+        listen 443;
         server_name ${INTRANAME}.42.fr/wordpress;
         return 301 https://${INTRANAME}.42.fr$request_uri;
 }
@@ -17,7 +17,7 @@ server {
         # Add index.php to the list if you are using PHP
         index index.php index.html index.htm index.nginx-debian.html;
 
-        server_name ${INTRANAME}.42.fr/wordpress;
+        server_name ${INTRANAME}.42.fr;
 
         location / {
                 # First attempt to serve request as file, then
@@ -31,10 +31,12 @@ server {
                include snippets/fastcgi-php.conf;
         #
         #       # With php-fpm (or other unix sockets):
-               fastcgi_pass unix:/run/php/php7.3-fpm.sock;
-               fastcgi_pass wordpress:9000;
-               fastcgi_index index.php;
-               include fastcgi_params;
+                fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+                fastcgi_pass wordpress:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO $fastcgi_path_info;
         }
 
         # deny access to .htaccess files, if Apache's document root

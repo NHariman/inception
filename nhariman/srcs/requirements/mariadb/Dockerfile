@@ -26,11 +26,18 @@ FROM debian:buster
 LABEL maintainer=nhariman email=<nhariman@student.codam.nl>
 
 #install and download everything necessary
-RUN apt-get update &&\
+#https://www.redhat.com/sysadmin/getting-started-socat - Socat helps with TCP port forwarding, IP6 relay, establishing a relatively secure environment and connects various types of channels.
 	apt install -y \
 	apt-utils \
 	mariadb-server \
-	mariadb-client
+	mariadb-client \
+	mariadb-backup \
+	socat ;\ 
+	userdel mysql &&\
+	useradd -u 999 mysql &&\
+	mkdir -p /data/mysql &&\
+	chown -R mysql:mysql /data/mysql
+
 
 #Copy all necessary configuration files
 COPY /tools/ ./tools
@@ -43,4 +50,4 @@ RUN service mysql start &&\
 
 EXPOSE 3306
 
-ENTRYPOINT  service mysql restart
+ENTRYPOINT mysqld
