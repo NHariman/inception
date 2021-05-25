@@ -28,4 +28,9 @@ context {
     ....
 }
 
+# Any directive outside the bloack is said to inhabit the main context.
+# The main context represents the broadest environment for nginx config. It is
+# used to configure details that affect the entire application on basic level.
+# 
+
 https://www.digitalocean.com/community/tutorials/understanding-the-nginx-configuration-file-structure-and-configuration-contexts
