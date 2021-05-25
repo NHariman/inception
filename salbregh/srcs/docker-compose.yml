@@ -15,8 +15,10 @@ services: # this section defines all the different container we will create
       - 443:80 # PAKT 80 UIT NGINX EN OPENT OP localhost:443
     links:
       - wordpress
+    extra_hosts:
+      - "salbregh.42.fr:127.0.0.1"
     restart: always
-    networks: 
+    networks:
       - inception
   
   mariadb:
