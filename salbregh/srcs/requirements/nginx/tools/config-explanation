@@ -1,0 +1,31 @@
+# location of the nginx config file depends on how the software is installed
+# /etc/nginx/nginx.config
+# if not there it could be at
+# /usr/local/nginx/conf/nginx.conf
+# or
+# /usr/local/etc/nginx/nginx.conf
+
+# the config has a tree like structure defined by sets of brackets {}
+# the areas that these brackets define are called contexts, they contain
+# configuration details that are separted according to their area of concern
+
+# context can be layered with other contexts, nginx prvides a level of
+# directive inheritance. If a directive is valid in multiple nested scopes,
+# a declaration in a broader context will be passed to any child contexts
+# as default values. 
+# directives can only be used in the contexts they were designed for.
+
+# THE CORE CONTEXT
+# The context that nginx utilizes in order to create a hierarchical tree
+# and seperate the concerns of discrete config blocks, the major structure
+# of an nginx config.
+
+# THE MAIN CONTEXT: the only context that is not contained in the context block
+
+# The main context is here
+....
+context {
+    ....
+}
+
+https://www.digitalocean.com/community/tutorials/understanding-the-nginx-configuration-file-structure-and-configuration-contexts
