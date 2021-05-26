@@ -4,6 +4,6 @@ FROM wordpress:5.7.2-fpm
 
 #MY CODE INSERTION:
 COPY tools/wp-cli.phar /usr/local/bin/wp
-RUN PWD
+RUN pwd
 #######
 
