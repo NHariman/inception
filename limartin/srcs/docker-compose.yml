@@ -56,7 +56,6 @@ services:
     volumes:
       - ./requirements/nginx/conf:/etc/nginx/conf.d
       - wordpress:/var/www/html #Mounts wordpress to dir set as root in nginx server block
-      - certbot-etc:/etc/letsencrypt
     # not using this network, or defining our own custom one.
     networks:
       - app-network
@@ -65,19 +64,7 @@ services:
       # infrastructure via the port 443 only, using the TLSv1.2 or TLSv1.3
       # protocol.
 
-# THIS ENTIRE SERVICE WILL NOT BE INCLUDED OUTSIDE FOLLOWING ALONG WITH THE TUTORIAL:
-  certbot:
-    depends_on:
-      - mariadb
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - wordpress:/var/www/html
-    command: certonly --webroot --webroot-path=/var/www/html --email limartin@student.codam.nl --agree-tos --no-eff-email --staging -d limartin.42.fr -d www.limartin.42.fr
-
 volumes:
-  certbot-etc:
   wordpress:
   mariadb:
 
