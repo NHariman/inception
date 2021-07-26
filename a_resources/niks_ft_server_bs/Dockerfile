@@ -90,7 +90,7 @@ RUN service mysql start &&\
 	sed -i "s/dbpassword/${admin_pw}/g" var/www/html/phpmyadmin/config.inc.php &&\
 	chmod +x /srcs/wp-cli.phar &&\
 	mv srcs/wp-cli.phar /usr/local/bin/wp &&\
-	wp core install --url="https://localhost/wordpress"  --title="ft_server" --admin_user=${admin_user} --admin_password=${admin_pw} --admin_email=${admin_email} --allow-root --path="var/www/html/wordpress"
+	wp core install --url="https://nhariman.42.fr"  --title="ft_server" --admin_user=${admin_user} --admin_password=${admin_pw} --admin_email=${admin_email} --allow-root --path="var/www/html/wordpress"
 
 #set ownerships and generate ssl key and certificate
 RUN chown -R www-data:www-data /var/www/ &&\
